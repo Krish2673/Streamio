@@ -1,0 +1,20 @@
+{
+  "name": "streamio",
+  "version": "1.0.0",
+  "description": "video hosting website similar to youtube",
+  "keywords": [
+    "backend",
+    "youtube",
+    "express",
+    "javascript",
+    "mongoose",
+    "mongodb"
+  ],
+  "license": "ISC",
+  "author": "Krish Pawar",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
