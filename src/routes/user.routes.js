@@ -1,6 +1,6 @@
 import {Router} from "express"
 import { loginUser, logoutUser, refreshAccessToken, registerUser } from "../controllers/user.controller.js";
-import { upload } from "../middleware/multer.middleware.js";
+import {upload} from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 
 const router = Router();
@@ -16,7 +16,24 @@ router.route("/register").post(
             maxCount : 1
         }
     ]),
-    registerUser)
+    registerUser);
+
+// router.post(
+//   "/register",
+//   upload.any(),
+//   (req, res) => {
+//     return res.json({
+//       body: req.body,
+//       files: req.files
+//     });
+//   }
+// );
+
+
+// console.log("Upload Type:", typeof upload);
+// console.log("UPLOAD VALUE:", upload);
+// console.log("UPLOAD KEYS:", Object.keys(upload));
+// console.log("UPLOAD.SINGLE:", upload.single);
 
 router.route("/login").post(loginUser)
 

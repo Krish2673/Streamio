@@ -2,8 +2,7 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 import {APIError} from "../utils/APIError.js"
 import {User} from "../models/user.model.js";
 import {uploadOnCloudinary} from "../utils/Cloudinary.js"
-import { APIResponse } from "../utils/APIResponse.js"; 
-import { trusted } from "mongoose";
+import { APIResponse } from "../utils/APIResponse.js";
 
 const generateTokens = async (Userid) => {
      try {
@@ -35,7 +34,9 @@ const registerUser = asyncHandler(async (req,res) => {
         throw new APIError(409,"Username or Email already exists");
    }
 
-//    console.log("Files: ", req.files);
+   console.log("Body: ", req.body);
+   console.log("Headers:", req.headers["content-type"]);
+   console.log("Files: ", req.files);
 
    const avatarLocalPath = req.files?.avatar[0]?.path;                      // Handle File Upload (Images)
 //    let coverImageLocalPath = null;
@@ -50,8 +51,13 @@ const registerUser = asyncHandler(async (req,res) => {
           throw new APIError(400, "Avatar is Required");
      }
      
-     const avatar = await uploadOnCloudinary(avatarLocalPath);               // Upload to Cloudinary
-     const coverImage = coverImageLocalPath ? await uploadOnCloudinary(coverImageLocalPath) : null;
+     // console.log("Uploading avatar:", avatarLocalPath);
+     const avatar = await uploadOnCloudinary(avatarLocalPath);
+     // console.log("Cloudinary response:", avatar);
+
+
+     // const avatar = await uploadOnCloudinary(avatarLocalPath);               // Upload to Cloudinary
+     const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
    if(!avatar) {
         throw new APIError(500, "Error in uploading Avatar");
@@ -72,7 +78,7 @@ const registerUser = asyncHandler(async (req,res) => {
         throw new APIError(500, "Error in Registering User");
     }
 
-    return res.status(201).json(                                                     // return response
+    return res.status(200).json(                                                     // return response
         new APIResponse(200, createdUser, "User Registered Successfully!")
     )
 })

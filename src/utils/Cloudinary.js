@@ -1,6 +1,6 @@
 import {v2 as cloudinary} from "cloudinary"
-import fs, { existsSync } from "fs"
-import path from "path";
+import fs from "fs"
+// import path from "path";
 import dotenv from "dotenv";
 
 dotenv.config()
@@ -16,24 +16,24 @@ const uploadOnCloudinary = async (localFilePath) => {
         return null;
         // throw new Error("File path is required to upload on Cloudinary");
 
-    const absolutePath = path.resolve(localFilePath);
+    // const absolutePath = path.resolve(localFilePath);
     
     try {
-        const response = await cloudinary.uploader.upload(absolutePath, {
+        const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type : "auto"
         });
+        fs.unlinkSync(localFilePath);
         // console.log("File has been uploaded Successfully on Cloudinary", response.url);
-        if(fs.existsSync(absolutePath)) {
-            fs.unlinkSync(absolutePath);
-        }
+        // if(fs.existsSync(absolutePath)) {
+        // }
         return response;
         // return response.url;
     }
     catch(err) {
+        fs.unlinkSync(localFilePath);
         // console.error("🔥 Cloudinary ERROR FULL:", err);
-        if(fs.existsSync(absolutePath)) {
-            fs.unlinkSync(absolutePath);
-        }
+        // if(fs.existsSync(absolutePath)) {
+        // }
         // if (localFilePath && fs.existsSync(localFilePath)) {
         // }
         return null;
