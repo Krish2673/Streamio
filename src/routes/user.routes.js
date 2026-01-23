@@ -1,7 +1,8 @@
 import {Router} from "express"
-import { loginUser, logoutUser, refreshAccessToken, registerUser } from "../controllers/user.controller.js";
+import { changePassword, getCurrentUser, getUserChannelProfile, getWatchHistory, loginUser, logoutUser, refreshAccessToken, registerUser, updateUserAvatar, updateUserCoverImage, updateUserDetails } from "../controllers/user.controller.js";
 import {upload} from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verify } from "jsonwebtoken";
 
 const router = Router();
 
@@ -18,18 +19,6 @@ router.route("/register").post(
     ]),
     registerUser);
 
-// router.post(
-//   "/register",
-//   upload.any(),
-//   (req, res) => {
-//     return res.json({
-//       body: req.body,
-//       files: req.files
-//     });
-//   }
-// );
-
-
 // console.log("Upload Type:", typeof upload);
 // console.log("UPLOAD VALUE:", upload);
 // console.log("UPLOAD KEYS:", Object.keys(upload));
@@ -41,5 +30,19 @@ router.route("/login").post(loginUser)
 router.route("/logout").post(verifyJWT, logoutUser)
 
 router.route("/refresh-token").post(refreshAccessToken)
+
+router.route("/change-password").post(verifyJWT, changePassword)
+
+router.route("/current-user").get(verifyJWT, getCurrentUser)
+
+router.route("/update-account").patch(verifyJWT, updateUserDetails)
+
+router.route("/update-avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
+
+router.route("/update-coverImage").patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
+
+router.route("/channel/:username").get(verifyJWT, getUserChannelProfile)
+
+router.route("/watch-history").get(verifyJWT, getWatchHistory)
 
 export default router;
