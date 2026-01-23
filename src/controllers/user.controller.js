@@ -242,18 +242,20 @@ const updateUserAvatar = asyncHandler(async (req,res) => {
      }
 
      const avatar = await uploadOnCloudinary(avatarLocalPath);
-
+     
      if(!avatar.url) {
           throw new APIError(400, "Avatar Image is required");
      }
 
-     const user = await User.findByIdAndUpdate(req.user?._id, {
-          $set : {
-               avatar : avatar.url
-          }
-     }, {
-          new : true
-     }).select("-password")
+     const user = await User.findById(req.user?._id).select("-password");
+     
+     const oldAvatar = user.avatar;
+
+     await cloudinary.uploader.destroy(oldAvatar.split("/").pop().split(".")[0]);         // alternative - store public_id in DB
+
+     user.avatar = avatar.url;
+     user.save({validateBeforeSave : false})
+     
 
      return res.status(200).json(
           new APIResponse(200, user, "User Avatar Updated Successfully")
@@ -274,13 +276,14 @@ const updateUserCoverImage = asyncHandler(async (req,res) => {
           throw new APIError(400, "Cover Image is required");
      }
 
-     const user = await User.findByIdAndUpdate(req.user?._id, {
-          $set : {
-               coverImage : coverImage.url
-          }
-     }, {
-          new : true
-     }).select("-password")
+     const user = await User.findById(req.user?._id).select("-password");
+     
+     const oldcoverImage = user.coverImage;
+
+     await cloudinary.uploader.destroy(oldcoverImage.split("/").pop().split(".")[0]);         // alternative - store public_id in DB
+
+     user.coverImage = coverImage.url;
+     user.save({validateBeforeSave : false})
 
      return res.status(200).json(
           new APIResponse(200, user, "Cover Image Updated Successfully")
