@@ -3,6 +3,7 @@ import {APIError} from "../utils/APIError.js"
 import {User} from "../models/user.model.js";
 import {uploadOnCloudinary} from "../utils/Cloudinary.js"
 import { APIResponse } from "../utils/APIResponse.js";
+import jwt from "jsonwebtoken";
 
 const generateTokens = async (Userid) => {
      try {
@@ -124,8 +125,8 @@ const loginUser = asyncHandler(async (req,res) => {
 const logoutUser = asyncHandler(async (req,res) => {
 
      await User.findByIdAndUpdate(req.user._id, {
-          $set : {
-               refreshToken : undefined
+          $unset : {
+               refreshToken : 1
           }},
           {
                new : true
