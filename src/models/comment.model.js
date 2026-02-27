@@ -14,6 +14,7 @@ const commentSchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : "User"
     }
+    // Replies can be implemented with a reference to the parent comment.
 }, {
     timestamps : true
 })

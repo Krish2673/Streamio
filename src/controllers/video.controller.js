@@ -21,7 +21,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
         }
     }
 
-    const pipeline = [
+    const pipeline = Video.aggregate([
         {
             $lookup: {
                 from : "users",
@@ -58,7 +58,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
                 [sortBy] : sortType === "asc" ? 1 : -1
             }
         }
-    ]
+    ])
 
     const result = await Video.aggregatePaginate(pipeline, {page,limit});
 
