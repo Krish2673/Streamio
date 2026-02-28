@@ -13,6 +13,10 @@ const commentSchema = new Schema({
     owner : {
         type : Schema.Types.ObjectId,
         ref : "User"
+    },
+    likeCount : {
+        type : Number,
+        default : 0
     }
     // Replies can be implemented with a reference to the parent comment.
 }, {

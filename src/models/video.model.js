@@ -32,6 +32,10 @@ const videoSchema = new mongoose.Schema({
         type : Number,
         default : 0
     },
+    likeCount : {
+        type : Number,
+        default : 0
+    },
     isPublished: {
         type: Boolean,
         default: true
